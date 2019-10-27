@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Example using Service</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/datatables.min.css"/>
+
+</head>
+<body ng-app="myApp">
+    <nav class="navbar navbar-dark bg-primary">
+        <div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Service My Console <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+  <div ng-controller="MyController" class="container">
+    <nav class="mt-5">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Basic Log</a>
+            <a class="nav-item nav-link" id="nav-chrono-tab" data-toggle="tab" href="#nav-chrono" role="tab" aria-controls="nav-chrono" aria-selected="false">Time Measure</a>
+            <a class="nav-item nav-link" id="nav-table-tab" data-toggle="tab" href="#nav-table" role="tab" aria-controls="nav-table" aria-selected="false">Show Table Info</a>
+            <a class="nav-item nav-link" id="nav-group-tab" data-toggle="tab" href="#nav-group" role="tab" aria-controls="nav-group" aria-selected="false">Show Group Info</a>
+            <a class="nav-item nav-link" id="nav-dir-tab" data-toggle="tab" href="#nav-dir" role="tab" aria-controls="nav-dir" aria-selected="false">Listing style properties</a>
+        </div>
+    </nav>
+    <div class="tab-content mt-3" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <form>
+                <div class="form-group">
+                    <label for="message">Text Message</label>
+                    <input type="text" 
+                           class="form-control" 
+                           ng-init="message='initial message in log'" 
+                           ng-model="message" 
+                           placeholder="enter message">
+                </div>
+                <div class="form-group">
+                    <label for="typeMessage">Type message</label>
+                    <select class="form-control" ng-init="type='log'" ng-model='type'>
+                        <option value=''>Select type message</option>
+                        <option value='log'>log</option>
+                        <option value='info'>info</option>
+                        <option value='warning'>warning</option>
+                        <option value='error'>error</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="style">Style Message</label>
+                    <input type="text" 
+                           class="form-control" 
+                           ng-init="style='color:#000;background:#fff'" 
+                           ng-model="style" 
+                           placeholder="enter style">
+                </div>
+                <button type="button" class="btn btn-primary float-right" ng-click="callNotify(message,type,style);">write log</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="nav-chrono" role="tabpanel" aria-labelledby="nav-chrono-tab">
+            <table id="photos" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>albumId</th>
+                        <th>id</th>
+                        <th>title</th>
+                        <th>url</th>
+                        <th>thumbnailUrl</th>
+                    </tr>
+                </thead>
+            </table>
+            <form>
+                <button type="button" class="btn btn-success float-right" ng-click="getPhotos();">Get Info</button>
+            </form>
+            <br>
+            <button type="button" class="btn btn-warning btn-block mt-10" ng-click="timeLog();">TimeLog</button>
+        </div>
+        <div class="tab-pane fade" id="nav-table" role="tabpanel" aria-labelledby="nav-table-tab">
+            <div class="form-group">
+                <label for="arrObJMessage">Array/Object message</label>
+                <p>{{arrObJMessage | json}}</p>
+            </div>    
+            <form>
+                <button type="button" 
+                        class="btn btn-secondary float-right" 
+                        ng-click="showTable();">
+                    Show Table
+                </button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="nav-group" role="tabpanel" aria-labelledby="nav-group-tab">
+            <div class="form-group">
+                <label for="arrObJMessage">Group Message</label>
+                <p>{{arrGroupMessage | json}}</p>
+            </div>
+            <form>
+                <button type="button" 
+                        class="btn btn-secondary float-right  ml-5" 
+                        ng-click="stopGroup();">
+                    Stop Group
+                </button>
+                <button type="button" 
+                        class="btn btn-secondary float-right ml-5" 
+                        ng-click="startGroup();">
+                    Start Group
+                </button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="nav-dir" role="tabpanel" aria-labelledby="nav-dir-tab">
+            <form>
+                <div class="form-group">
+                    <label for="selector">Selector</label>
+                    <input type="text" 
+                           class="form-control" 
+                           ng-init="selector='document.body'" 
+                           ng-model="selector" 
+                           placeholder="enter selector">
+                </div>
+                <button type="button" 
+                        class="btn btn-secondary float-right  ml-5" 
+                        ng-click="getListStyles();">
+                    Get List Styles
+                </button>
+            </form>
+        </div>
+    </div>
+  </div>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/datatables.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.1/angular.js"></script>
+  <script src="script.js"></script>
+  <script src="myconsoleService.js"></script>
+  <script src="controller.js"></script>
